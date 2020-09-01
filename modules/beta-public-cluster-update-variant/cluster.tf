@@ -59,6 +59,10 @@ resource "google_container_cluster" "primary" {
   logging_service    = var.logging_service
   monitoring_service = var.monitoring_service
 
+  vertical_pod_autoscaling {
+    enabled = var.enable_vertical_pod_autoscaling
+  }
+
   cluster_autoscaling {
     enabled             = var.cluster_autoscaling.enabled
     autoscaling_profile = var.cluster_autoscaling.autoscaling_profile != null ? var.cluster_autoscaling.autoscaling_profile : "BALANCED"
@@ -78,10 +82,6 @@ resource "google_container_cluster" "primary" {
   enable_intranode_visibility = var.enable_intranode_visibility
   enable_shielded_nodes       = var.enable_shielded_nodes
   enable_kubernetes_alpha     = var.enable_kubernetes_alpha
-
-  vertical_pod_autoscaling {
-    enabled = var.enable_vertical_pod_autoscaling
-  }
 
   dynamic "pod_security_policy_config" {
     for_each = var.enable_pod_security_policy ? [var.enable_pod_security_policy] : []
